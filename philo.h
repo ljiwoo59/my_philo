@@ -12,7 +12,7 @@ typedef struct s_param
 {
 	int info[5];
 	pthread_t tid;
-	pthread_mutex_t mutex;
+	pthread_mutex_t *mutex;
 	int id;
 
 } t_param;

@@ -51,6 +51,8 @@ void *my_func(void *arg)
 
 	param = (t_param *)arg;
 	printf("%d\n", param->id);
+//	if ((param->id % 2) == 0)
+
 	return (0);
 }
 
@@ -63,15 +65,24 @@ int philo(char **argv)
 	while (++i < 5)
 		if (set_info(argv[i], i - 1, &param) == -1)
 			return (-1);
-		
+	param.mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * param.info[0]);
+	if (!param.mutex)
+		return (-1);
+	i = 0;
+	while (i < param.info[0])
+		if (pthread_mutex_init(&param.mutex[i++], NULL) != 0)
+				return (-1);
 	i = 0;
 	while (++i <= param.info[0])
 	{
 		param.id = i;
 		if (pthread_create(&param.tid, NULL, my_func, &param) != 0)
 			return (-1);
+		usleep(100);
 	}
-	//pthread_detach(param.tid);
+	i = -1;
+	if (pthread_join(param.tid, NULL) != 0)
+		return (-1);
 	return (0);
 }
 
