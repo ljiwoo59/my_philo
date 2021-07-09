@@ -34,30 +34,44 @@ int ft_atoi(char *s)
 	return (num);
 }
 
-int set_info(char *s, int i, int *info)
+int set_info(char *s, int i, t_param *param)
 {
 	int num;
 
 	num = ft_atoi(s);
-	if (num < 0)
+	if (num <= 0)
 		return (-1);
-	info[i] = num;
+	param->info[i] = num;
+	return (0);
+}
+
+void *my_func(void *arg)
+{
+	t_param *param;
+
+	param = (t_param *)arg;
+	printf("%d\n", param->id);
 	return (0);
 }
 
 int philo(char **argv)
 {
-	int info[4];
+	t_param param;
 	int i;
 
 	i = 0;
 	while (++i < 5)
-		if (set_info(argv[i], i - 1, info) == -1)
+		if (set_info(argv[i], i - 1, &param) == -1)
 			return (-1);
-	
-	for(int j = 0; j < 4; j++)
-		printf("%d ", info[j]);
-
+		
+	i = 0;
+	while (++i <= param.info[0])
+	{
+		param.id = i;
+		if (pthread_create(&param.tid, NULL, my_func, &param) != 0)
+			return (-1);
+	}
+	//pthread_detach(param.tid);
 	return (0);
 }
 
@@ -65,7 +79,10 @@ int main(int argc, char **argv)
 {
 	if (argc == 5)
 		if (philo(argv) == -1)
+		{
+			printf("Error");
 			return (1);
+		}
 	/*
 	else if (argc == 6)
 		if (philo_time(argv) == -1)
