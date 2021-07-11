@@ -47,12 +47,12 @@ int set_info(char *s, int i, t_param *param)
 	return (0);
 }
 
-long long get_time(void)
+double get_time(void)
 {
 	struct timeval tv;
 
 	if (gettimeofday(&tv, NULL) == -1)
 		return (-1);
 
-	return ((long long)(tv.tv_sec + tv.tv_usec / 1000000));
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }

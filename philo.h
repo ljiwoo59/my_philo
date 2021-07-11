@@ -14,6 +14,7 @@ typedef struct s_param
 	pthread_t *tid;
 	pthread_mutex_t *mutex;
 	suseconds_t now;
+	int init_d;
 	int id;
 
 } t_param;
@@ -29,7 +30,7 @@ typedef struct s_each
 int ft_strlen(char *s);
 int ft_atoi(char *s);
 int set_info(char *s, int i, t_param *param);
-long long get_time(void);
-int eat(t_param *param, int id);
+double get_time(void);
+int eat(t_param *param, int id, long long init);
 
 #endif
