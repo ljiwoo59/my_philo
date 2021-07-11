@@ -18,4 +18,18 @@ typedef struct s_param
 
 } t_param;
 
+typedef struct s_each
+{
+	int left;
+	int right;
+	double start;
+	double end;
+} t_each;
+
+int ft_strlen(char *s);
+int ft_atoi(char *s);
+int set_info(char *s, int i, t_param *param);
+long long get_time(void);
+int eat(t_param *param, int id);
+
 #endif
