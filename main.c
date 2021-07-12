@@ -3,19 +3,31 @@
 void *my_func(void *arg)
 {
 	t_param *param;
+	t_each each;
 	int id;
 	double init;
+	int have_eat;
 
 	param = (t_param *)arg;
 	id = param->id;
+	if (id == 1)
+		each.left = 0;
+	else
+		each.left = id - 1;
+	if (id == param->info[0])
+		each.right = 0;
+	else
+		each.right = id;
 	usleep((param->info[0] + 1 - id) * 100);
 	init = get_time();
 	int stop = 5;
 	while(stop--)
 	{
-		eat(param, id, init);
+		if (take_fork(param, id, init, each))
+			have_eat = eat(param, id, init, each);
+		if (have_eat == 0)
+			sleeping(param, id, init);
 		printf("%.f ms philo%d is thinking\n", get_time() - init, id);
-		usleep(1);
 	}
 	return (0);
 }
@@ -25,6 +37,8 @@ int philo(char **argv)
 	t_param param;
 	int i;
 
+	pthread_mutex_init(&param.stop, NULL);
+	
 	i = 0;
 	while (++i < 5)
 		if (set_info(argv[i], i - 1, &param) == -1)
@@ -46,7 +60,7 @@ int philo(char **argv)
 		param.id = i;
 		if (pthread_create(&param.tid[i - 1], NULL, my_func, &param) != 0)
 			return (-1);
-		usleep(100);
+		usleep(1000);
 	}	
 	i = 0;
 	while (i < param.info[0])
