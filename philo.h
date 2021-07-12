@@ -15,16 +15,22 @@ typedef struct s_param
 	pthread_mutex_t stop;
 	pthread_mutex_t *mutex;
 	suseconds_t now;
-	int init_d;
+	int init;
 	int id;
+	int is_dead;
+	int *last_meal;
 
 } t_param;
+
+typedef struct s_monitor
+{
+	pthread_t *m_tid;
+} t_monitor;
 
 typedef struct s_each
 {
 	int left;
 	int right;
-	double start;
 	double end;
 } t_each;
 
