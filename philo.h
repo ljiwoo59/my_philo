@@ -12,34 +12,36 @@ typedef struct s_param
 {
 	int info[5];
 	pthread_t *tid;
+	pthread_t m_tid;
 	pthread_mutex_t stop;
 	pthread_mutex_t *mutex;
-	suseconds_t now;
-	int init;
 	int id;
 	int is_dead;
 	int *last_meal;
 
 } t_param;
 
-typedef struct s_monitor
-{
-	pthread_t *m_tid;
-} t_monitor;
-
 typedef struct s_each
 {
+	int id;
 	int left;
 	int right;
+	int have_eat;
+	double start;
 	double end;
 } t_each;
 
 int ft_strlen(char *s);
 int ft_atoi(char *s);
 int set_info(char *s, int i, t_param *param);
+int init_param(t_param *param);
+void init_each(t_param *param, t_each *each);
 double get_time(void);
-int take_fork(t_param *param, int id, long long init, t_each each);
-int eat(t_param *param, int id, long long init, t_each each);
-int sleeping(t_param *param, int id, long long init);
+int take_fork(t_param *param, t_each each);
+int eat(t_param *param, t_each each);
+int sleeping(t_param *param, t_each each);
+int philo(t_param *param);
+void *my_func(void *arg);
+void *monitoring(void *arg);
 
 #endif

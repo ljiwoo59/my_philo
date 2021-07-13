@@ -34,19 +34,6 @@ int ft_atoi(char *s)
 	return (num);
 }
 
-int set_info(char *s, int i, t_param *param)
-{
-	int num;
-
-	num = ft_atoi(s);
-	if (i == 0 && num <= 0)
-		return (-1);
-	if (i && num < 0)
-		return (-1);
-	param->info[i] = num;
-	return (0);
-}
-
 double get_time(void)
 {
 	struct timeval tv;
