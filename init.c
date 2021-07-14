@@ -17,9 +17,24 @@ int init_param(t_param *param)
 {
 	int i;
 
+	if (param->six == 1)
+	{
+		param->eat_time = (int *)malloc(sizeof(int) * param->info[0]);
+		if (!param->eat_time)
+			return (-1);
+		i = 0;
+		while (i < param->info[0])
+			param->eat_time[i++] = 0;
+	}
 	param->last_meal = (int *)malloc(sizeof(int) * param->info[0]);
 	if (!param->last_meal)
 		return (-1);
+	param->fork = (int *)malloc(sizeof(int) * param->info[0]);
+	if (!param->fork)
+		return (-1);
+	i = 0;
+	while (i < param->info[0])
+		param->fork[i++] = 0;
 	param->tid = (pthread_t *)malloc(sizeof(pthread_t) * param->info[0]);
 	if (!param->tid)
 		return (-1);

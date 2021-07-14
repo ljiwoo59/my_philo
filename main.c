@@ -17,6 +17,11 @@ void *monitoring(void *arg)
 		start = get_time();
 		while ((get_time() - start) < 1)
 			usleep(1);
+		if (param->six == 1 && check_eat(param) == 1)
+		{
+			param->is_dead = 0;
+			break;
+		}
 		i = 0;
 		while (i < param->info[0])
 		{
@@ -40,18 +45,29 @@ void *my_func(void *arg)
 {
 	t_param *param;
 	t_each each;
+	int ret;
 
 	param = (t_param *)arg;
 	init_each(param, &each);
 //	int stop = 5;
 	while(param->is_dead) //param->is_dead
 	{
-		if (param->is_dead && take_fork(param, each))
-			each.have_eat = eat(param, each);
-		if (param->is_dead && each.have_eat == 0)
-			sleeping(param, each);
+		each.have_eat = 0;
 		if (param->is_dead)
-			printf("%.f ms philo%d is thinking\n", get_time() - each.start, each.id);
+		{
+			if (each.id % 2 == 0)
+				ret = e_take_fork(param, each);
+			else
+				ret = o_take_fork(param, each);
+			if (ret == 1)
+			{
+				eat(param, each);
+				if (param->is_dead)
+					sleeping(param, each);
+				if (param->is_dead)
+					printf("%.f ms philo%d is thinking\n", get_time() - each.start, each.id);
+			}
+		}
 	}
 	return (0);
 }
@@ -60,7 +76,7 @@ int philo(t_param *param)
 {
 	int i;
 
-	//pthread_mutex_init(&param.stop, NULL);
+	pthread_mutex_init(&param->stop, NULL);
 	
 	if (pthread_create(&param->m_tid, NULL, monitoring, param) != 0)
 		return (-1);
@@ -86,10 +102,13 @@ int main(int argc, char **argv)
 	t_param param;
 	int i;
 
-	if (argc == 5)
+	param.six = 0;
+	if (argc == 5 || argc == 6)
 	{
+		if (argc == 6)
+			param.six = 1;
 		i = 0;
-		while (++i < 5)
+		while (++i < argc)
 			if (set_info(argv[i], i - 1, &param) == -1)
 				return (1);
 		if (init_param(&param) != 0)

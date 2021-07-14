@@ -43,3 +43,16 @@ double get_time(void)
 
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
+
+int check_eat(t_param *param)
+{
+	int i;
+
+	i = 0;
+	while (i < param->info[0])
+	{
+		if (param->eat_time[i++] < param->info[4])
+			return (-1);
+	}
+	return (1);
+}
