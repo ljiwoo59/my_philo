@@ -37,7 +37,7 @@ int ft_strlen(char *s);
 int ft_atoi(char *s);
 int set_info(char *s, int i, t_param *param);
 int init_param(t_param *param);
-void init_each(t_param *param, t_each *each);
+int init_each(t_param *param, t_each *each);
 double get_time(void);
 int check_eat(t_param *param);
 int e_take_fork(t_param *param, t_each each);

@@ -48,24 +48,33 @@ void *my_func(void *arg)
 	int ret;
 
 	param = (t_param *)arg;
-	init_each(param, &each);
-//	int stop = 5;
-	while(param->is_dead) //param->is_dead
+	if (!init_each(param, &each))
 	{
-		each.have_eat = 0;
-		if (param->is_dead)
+		while(param->is_dead)
 		{
-			if (each.id % 2 == 0)
-				ret = e_take_fork(param, each);
-			else
-				ret = o_take_fork(param, each);
-			if (ret == 1)
+		}
+	}
+	else
+	{
+		while(param->is_dead)
+		{
+			each.have_eat = 0;
+			if (param->is_dead)
 			{
-				eat(param, each);
-				if (param->is_dead)
-					sleeping(param, each);
-				if (param->is_dead)
-					printf("%.f ms philo%d is thinking\n", get_time() - each.start, each.id);
+				//if (each.id % 2 == 0)
+				pthread_mutex_lock(&param->stop);
+				ret = e_take_fork(param, each);
+				pthread_mutex_unlock(&param->stop);
+				//else
+				//	ret = o_take_fork(param, each);
+				if (ret == 1)
+				{
+					eat(param, each);
+					if (param->is_dead)
+						sleeping(param, each);
+					if (param->is_dead)
+						printf("%.f ms philo%d is thinking\n", get_time() - each.start, each.id);
+				}
 			}
 		}
 	}

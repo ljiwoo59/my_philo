@@ -49,7 +49,7 @@ int init_param(t_param *param)
 	return (0);
 }
 
-void init_each(t_param *param, t_each *each)
+int init_each(t_param *param, t_each *each)
 {
 	each->id = param->id;
 	param->last_meal[each->id - 1] = 0;
@@ -61,6 +61,9 @@ void init_each(t_param *param, t_each *each)
 		each->right = 0;
 	else
 		each->right = each->id;
+	if (each->left == each->right)
+		return (0);
 	usleep((param->info[0] + 1 - each->id) * 1000);
 	each->start = get_time();
+	return (1);
 }
